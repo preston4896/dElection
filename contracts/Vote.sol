@@ -12,7 +12,7 @@ contract Vote {
         bool party_vote; // true = Party P; false = Party O
     }
 
-    // Event to update front-end that a new voter has casted their vote.
+    // Event to update the front-end to show that a new voter has casted their vote.
     event voteCasted(uint id);
 
     // associate eth address to voter's id.
@@ -45,10 +45,6 @@ contract Vote {
                 return voters[i].party_vote ? "P" : "O";
             }
         }
-    }
-
-    function getVoterId(uint id) public view isRegisteredVoter(id) returns (uint) {
-        return addressToVoter[msg.sender];
     }
 
     function getCount(bool party) public view returns (uint256) {

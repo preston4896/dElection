@@ -16,11 +16,6 @@ contract("Vote", (accounts) => {
             preston = accounts[0];
         })
 
-        it("can fetch the correct ID by address", async() => {
-            let returnedID = await votes.getVoterId(expectedId);
-            assert.equal(returnedID, expectedId, "ID should match.");
-        })
-
         it("should only show one vote.", async() => {
             let returnedCount = await votes.getCount(true);
             assert.equal(returnedCount, 1, "There should only be one vote.");
