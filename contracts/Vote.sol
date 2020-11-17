@@ -1,4 +1,4 @@
-pragma solidity ^0.6.0;
+pragma solidity >= 0.4.0 < 0.8.0;
 
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 
@@ -45,9 +45,5 @@ contract Vote {
                 return voters[i].party_vote ? "P" : "O";
             }
         }
-    }
-
-    function getPartyCount(bool inputParty) public view returns (uint256) {
-        return partyCount[inputParty];
     }
 }
