@@ -8,23 +8,23 @@ contract Vote {
     struct Voter {
         string first_name;
         string last_name;
-        uint8 id;
+        uint id;
         bool party_vote; // true = Party P; false = Party O
     }
 
     // Event to update front-end that a new voter has casted their vote.
-    event voteCasted(uint8 id);
+    event voteCasted(uint id);
 
     // associate eth address to voter's id.
-    mapping (address => uint8) public addressToVoter;
+    mapping (address => uint) private addressToVoter;
 
     // vote counts for each party.
-    mapping (bool => uint256) public partyCount;
+    mapping (bool => uint256) private partyCount;
 
     // voter's list.
     Voter[] internal voters;
 
-    function castVote(string memory first, string memory last, uint8 id, bool party) public {
+    function castVote(string memory first, string memory last, uint id, bool party) public {
         // voters can only vote once.
         require(addressToVoter[msg.sender] == 0);
         addressToVoter[msg.sender] = id;
@@ -34,16 +34,24 @@ contract Vote {
     }
 
     // verifies the voter by their id
-    modifier isRegisteredVoter(uint8 id) {
+    modifier isRegisteredVoter(uint id) {
         require(addressToVoter[msg.sender] == id);
         _;
     }
 
-    function getVote(uint8 id) public view isRegisteredVoter(id) returns (string memory) {
+    function getVote(uint id) public view isRegisteredVoter(id) returns (string memory) {
         for (uint i = 0; i < voters.length; i++) {
             if (voters[i].id == id) {
                 return voters[i].party_vote ? "P" : "O";
             }
         }
+    }
+
+    function getVoterId(uint id) public view isRegisteredVoter(id) returns (uint) {
+        return addressToVoter[msg.sender];
+    }
+
+    function getCount(bool party) public view returns (uint256) {
+        return partyCount[party];
     }
 }
