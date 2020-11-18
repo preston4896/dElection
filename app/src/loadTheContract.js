@@ -30,21 +30,34 @@ async function loadWeb3() {
 
 // Step 2: load the contract.
 async function loadContract() {
-    let contractInstance;
+    // const networkId = await window.web3.eth.net.getId();
+    // const networkData = Vote.networks[networkId];
+    // if (networkData) {
+    //     await fetch("../../build/contracts/Vote.json")
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         const abi = data.abi;
+    //         const address = networkData.address;
+    //         contract = new window.web3.eth.Contract(abi, address);
+    //         console.log("contract", contract);
+    //     })
+    // }
+
     await fetch("../../build/contracts/Vote.json")
-        .then(response => response.json())
-        .then(abi => {
-            contractInstance = new window.web3.eth.Contract(abi);
-        })
-    return contractInstance;
+    .then(response => response.json())
+    .then(data => {
+        const abi = data.abi;
+        const address = "0xc0de8dFEA23B2BeE62aCbB90c266E893574d83Cb";
+        contract = new window.web3.eth.Contract(abi, address);
+        console.log("contract", contract);
+    })
 }
 
 async function load() {
     await loadWeb3();
     console.log(window.web3.version);
-    contract = await loadContract();
-    console.log("Loaded contract: ", contract);
-    let count = await contract.methods.getCount().call();
+    await loadContract();
+    let count = await contract.methods.getCount(true).call();
     console.log("Test load getCount().",  count);
 }
 
