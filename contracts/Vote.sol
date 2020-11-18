@@ -16,7 +16,7 @@ contract Vote {
     event voteCasted(uint id);
 
     // associate eth address to voter's id.
-    mapping (address => uint) private addressToVoter;
+    mapping (uint => address) private voterToAddress;
 
     // vote counts for each party.
     mapping (bool => uint256) private partyCount;
@@ -26,8 +26,8 @@ contract Vote {
 
     function castVote(string memory first, string memory last, uint id, bool party) public {
         // voters can only vote once.
-        require(addressToVoter[msg.sender] == 0);
-        addressToVoter[msg.sender] = id;
+        require(voterToAddress[id] == address(0));
+        voterToAddress[id] = msg.sender;
         voters.push(Voter(first, last, id, party));
         partyCount[party]++;
         emit voteCasted(id);
@@ -35,7 +35,7 @@ contract Vote {
 
     // verifies the voter by their id
     modifier isRegisteredVoter(uint id) {
-        require(addressToVoter[msg.sender] == id);
+        require(voterToAddress[id] == msg.sender);
         _;
     }
 
@@ -49,5 +49,9 @@ contract Vote {
 
     function getCount(bool party) public view returns (uint256) {
         return partyCount[party];
+    }
+
+    function getVoterAddress(uint id) public view isRegisteredVoter(id) returns (address) {
+        return voterToAddress[id];
     }
 }

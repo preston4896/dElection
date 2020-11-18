@@ -16,6 +16,11 @@ contract("Vote", (accounts) => {
             preston = accounts[0];
         })
 
+        it("should verify correct address", async() => {
+            let returnedAdd = await votes.getVoterAddress(expectedId);
+            assert.equal(returnedAdd, preston, "Addresses should match.");
+        })
+
         it("should only show one vote.", async() => {
             let returnedCount = await votes.getCount(true);
             assert.equal(returnedCount, 1, "There should only be one vote.");
