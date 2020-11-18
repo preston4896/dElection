@@ -1,1 +1,4 @@
 node_modules
+/app/src/dev
+/app/app_script.sh
+build/contracts
